@@ -1,4 +1,4 @@
-# ecommerce-mern-project-starter-code
+# Ecommerce Shopping App - MERN PROJECT
 complete ecommerce app project 2023
 
 
