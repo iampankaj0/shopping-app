@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Row,
@@ -7,6 +7,7 @@ import {
   Button,
   ListGroupItem,
   Image,
+  Form,
 } from "react-bootstrap";
 import Rating from "../components/Rating";
 import { productDetails } from "../actions/productActions";
@@ -14,7 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/shared/Loader";
 import Message from "../components/shared/Message";
 
-const ProductDetails = () => {
+const ProductDetails = ({ history }) => {
+  const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
   const { id: productId } = useParams();
 
@@ -25,6 +27,10 @@ const ProductDetails = () => {
   useEffect(() => {
     dispatch(productDetails(productId));
   }, [dispatch, productId]);
+
+  const addToCartHandler = () => {
+    history.push(`/cart/${productId}?qty=${qty}`);
+  };
 
   return (
     <Fragment>
@@ -69,8 +75,30 @@ const ProductDetails = () => {
                   </Col>
                 </Row>
               </ListGroupItem>
+
               <ListGroupItem>
-                <Button className="btn-block" type="button">
+                <Row>
+                  <Col>Qty</Col>
+                  <Form.Control
+                    as="select"
+                    value={qty}
+                    onChange={(e) => setQty(e.target.value)}
+                  >
+                    {[...Array(product.countInStock).keys()].map((x) => (
+                      <option value={x + 1} key={x + 1}>
+                        {x + 1}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Row>
+              </ListGroupItem>
+
+              <ListGroupItem>
+                <Button
+                  className="btn-block"
+                  type="button"
+                  onClick={addToCartHandler}
+                >
                   Add To cart
                 </Button>
               </ListGroupItem>
