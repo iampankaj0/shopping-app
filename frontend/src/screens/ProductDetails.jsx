@@ -14,6 +14,7 @@ import { productDetails } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/shared/Loader";
 import Message from "../components/shared/Message";
+import { addToCart } from "../actions/cartAction";
 
 const ProductDetails = ({ history }) => {
   const [qty, setQty] = useState(1);
@@ -28,8 +29,8 @@ const ProductDetails = ({ history }) => {
     dispatch(productDetails(productId));
   }, [dispatch, productId]);
 
-  const addToCartHandler = () => {
-    history.push(`/cart/${productId}?qty=${qty}`);
+  const addToCartHandler = (productId, qty) => {
+    dispatch(addToCart(productId, qty));
   };
 
   return (
@@ -76,32 +77,36 @@ const ProductDetails = ({ history }) => {
                 </Row>
               </ListGroupItem>
 
-              <ListGroupItem>
-                <Row>
-                  <Col>Qty</Col>
-                  <Form.Control
-                    as="select"
-                    value={qty}
-                    onChange={(e) => setQty(e.target.value)}
-                  >
-                    {[...Array(product.countInStock).keys()].map((x) => (
-                      <option value={x + 1} key={x + 1}>
-                        {x + 1}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Row>
-              </ListGroupItem>
+              {product.countInStock > 0 && (
+                <>
+                  <ListGroupItem>
+                    <Row>
+                      <Col>Qty</Col>
+                      <Form.Control
+                        as="select"
+                        value={qty}
+                        onChange={(e) => setQty(e.target.value)}
+                      >
+                        {[...Array(product.countInStock).keys()].map((x) => (
+                          <option value={x + 1} key={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Row>
+                  </ListGroupItem>
 
-              <ListGroupItem>
-                <Button
-                  className="btn-block"
-                  type="button"
-                  onClick={addToCartHandler}
-                >
-                  Add To cart
-                </Button>
-              </ListGroupItem>
+                  <ListGroupItem>
+                    <Button
+                      className="btn-block"
+                      type="button"
+                      onClick={() => addToCartHandler(productId, qty)}
+                    >
+                      Add To cart
+                    </Button>
+                  </ListGroupItem>
+                </>
+              )}
             </Col>
           </Row>
         </div>

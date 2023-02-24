@@ -1,12 +1,21 @@
 import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const { cartItem } = useSelector((state) => state.cart);
+
   return (
     <>
-      <Navbar bg="dark" expand="lg" variant="dark" collapseOnSelect>
+      <Navbar
+        className="main__header"
+        bg="dark"
+        expand="lg"
+        variant="dark"
+        collapseOnSelect
+      >
         <Container>
           <Link to="/">
             <Navbar.Brand href="#home">online shop</Navbar.Brand>
@@ -15,8 +24,9 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
               <LinkContainer to="/cart">
-                <Nav.Link>
+                <Nav.Link className="navbar_cart_badge">
                   <i className="fas fa-shopping-cart"></i> cart
+                  {cartItem.length > 0 && <span>{cartItem.length}</span>}
                 </Nav.Link>
               </LinkContainer>
 
