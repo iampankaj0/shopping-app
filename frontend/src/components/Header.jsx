@@ -1,11 +1,18 @@
 import React from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
+import { logout } from "../actions/userAction";
 
 const Header = () => {
   const { cartItem } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.userLogin);
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
 
   return (
     <>
@@ -30,11 +37,22 @@ const Header = () => {
                 </Nav.Link>
               </LinkContainer>
 
-              <LinkContainer to="/login">
-                <Nav.Link>
-                  <i className="fas fa-user"></i> sign in
-                </Nav.Link>
-              </LinkContainer>
+              {userInfo?._id ? (
+                <NavDropdown title={userInfo.name} id="username">
+                  <LinkContainer to="/profile">
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to="/login">
+                  <Nav.Link>
+                    <i className="fas fa-user"></i> sign in
+                  </Nav.Link>
+                </LinkContainer>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -1,14 +1,6 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Row,
-  Col,
-  Form,
-  Button,
-  Card,
-  Image,
-  ListGroup,
-} from "react-bootstrap";
+import { Row, Col, Button, Image } from "react-bootstrap";
 
 import { removeToCart } from "../actions/cartAction";
 import { Link } from "react-router-dom";
@@ -19,14 +11,13 @@ const Cart = () => {
   const { cartItem } = useSelector((state) => state.cart);
 
   let SubTotal = 0;
-  cartItem.forEach((item) => {
+  cartItem?.forEach((item) => {
     SubTotal += item.price * item.qty;
   });
-  console.log(SubTotal);
 
   return (
     <Fragment>
-      {cartItem.length <= 0 ? (
+      {cartItem?.length <= 0 ? (
         <div className="mt-5">
           <Message variant={`warning`} alert="Please Add Some Items in Cart" />
         </div>
@@ -55,7 +46,9 @@ const Cart = () => {
                     <p className="text-center">
                       <span className="fw-bold">Quantity:</span> {item.qty}
                     </p>
-                    <p className="text-center"><span className="text-danger">SKU:</span> ##{item.product}</p>
+                    <p className="text-center">
+                      <span className="text-danger">SKU:</span> ##{item.product}
+                    </p>
                   </Col>
                   <Col md={2} className="">
                     <p className="w-100 text-center">Price: ${item.price}</p>
@@ -80,6 +73,13 @@ const Cart = () => {
                     ${(Math.round(SubTotal * 100) / 100).toFixed(2)}
                   </span>
                 </h5>
+                <Link
+                  to="/shipping"
+                  style={{ width: "fit-content" }}
+                  className="my-3 mx-auto d-block text-center btn btn-dark"
+                >
+                  CHECKOUT
+                </Link>
               </div>
             </Col>
           </Row>
